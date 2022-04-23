@@ -13,4 +13,6 @@ print(im.setAsm(bytes(code), 0x1000))
 while im.next():
     pass
 print(im)
+print(im.getDeletedAddr())
+print(im.getUsefulAddr())
 print(bytes(im))

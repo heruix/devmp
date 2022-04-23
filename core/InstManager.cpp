@@ -1,7 +1,6 @@
 #include "InstManager.h"
 #include "utils.h"
 #include "capstone/x86.h"
-//#include ""
 
 namespace devmp {
 
@@ -154,6 +153,32 @@ namespace devmp {
                 continue;
             result=std::copy(inst->inst->bytes, &inst->inst->bytes[0]+inst->inst->size, result);
         }
+    }
+
+    std::vector<size_t> InstManager::getDeletedAddr(){
+        if (!simplified)
+            this->simplify();
+        std::vector<size_t> result;
+        char buf[200];
+        for (InstInfo *inst: *insts) {
+            if (inst->isDeleted()||inst->isUseless()) {
+                result.push_back(inst->inst->address);
+            }
+        }
+        return result;
+    }
+
+    std::vector<size_t> InstManager::getUsefulAddr(){
+        if (!simplified)
+            this->simplify();
+        std::vector<size_t> result;
+        char buf[200];
+        for (InstInfo *inst: *insts) {
+            if (!inst->isUseless() && !inst->isDeleted()) {
+                result.push_back(inst->inst->address);
+            }
+        }
+        return result;
     }
 
     std::string InstManager::toString() {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <capstone/capstone.h>
+#include "capstone/capstone.h"
 #include <string>
 #include <stack>
 #include "InstInfo.h"
@@ -33,6 +33,10 @@ namespace devmp {
         [[nodiscard]] std::string toString();
 
         void getBytes(uint8_t *&, size_t&);
+
+        std::vector<size_t>  getDeletedAddr();
+
+        std::vector<size_t>  getUsefulAddr();
 
         friend std::ostream &operator<<(std::ostream &os, InstManager &inst_manager);
     };

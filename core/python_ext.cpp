@@ -87,6 +87,31 @@ static PyObject *PyInstManager_setKeep(PyInstManager *self, PyObject *args) {
     Py_RETURN_NONE;
 }
 
+static PyObject *PyInstManager_getDeletedAddr(PyInstManager *self, PyObject *args) {
+    if (!PyArg_ParseTuple(args, ":"))
+        return nullptr;
+    auto r=self->obj.getDeletedAddr();
+    PyObject*result=PyList_New(r.size());
+    size_t idx=0;
+    for(size_t i:r){
+        PyList_SetItem(result, idx++, PyLong_FromLongLong(i));
+    }
+    return result;
+}
+
+
+static PyObject *PyInstManager_getUsefulAddr(PyInstManager *self, PyObject *args) {
+    if (!PyArg_ParseTuple(args, ":"))
+        return nullptr;
+    auto r=self->obj.getUsefulAddr();
+    PyObject*result=PyList_New(r.size());
+    size_t idx=0;
+    for(size_t i:r){
+        PyList_SetItem(result, idx++, PyLong_FromLongLong(i));
+    }
+    return result;
+}
+
 static PyMethodDef PyInstManager_methods[] = {
         {"next",     (PyCFunction) PyInstManager_next,     METH_VARARGS, "Run next instruction"},
         {"__bytes__", (PyCFunction) PyInstManager_bytes, METH_VARARGS, "Get assembly bytes"},
@@ -95,6 +120,8 @@ static PyMethodDef PyInstManager_methods[] = {
         {"clear",    (PyCFunction) PyInstManager_clear,    METH_VARARGS, "Clear"},
         {"setUseless",    (PyCFunction) PyInstManager_setUseless,    METH_VARARGS, "Set the last instruction is useless"},
         {"setKeep",    (PyCFunction) PyInstManager_setKeep,    METH_VARARGS, "Keep the last instruction"},
+        {"getDeletedAddr",    (PyCFunction) PyInstManager_getDeletedAddr,    METH_VARARGS, "Get deleted instructions"},
+        {"getUsefulAddr",    (PyCFunction) PyInstManager_getUsefulAddr,    METH_VARARGS, "Get useful instructions"},
         {nullptr,    nullptr, 0,                                         nullptr}
 };
 
